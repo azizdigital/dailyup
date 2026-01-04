@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Generate PWA Icons</title>
+</head>
+<body>
+    <h2>PWA Icon Generator - OIM Reports</h2>
+    <p>Click the button to generate all required icon sizes</p>
+    <button onclick="generateIcons()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+        Generate Icons
+    </button>
+    <div id="output"></div>
+    
+    <script>
+        function generateIcons() {
+            const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+            const output = document.getElementById('output');
+            output.innerHTML = '<p>Generating icons...</p>';
+            
+            sizes.forEach(size => {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, size, size);
+                gradient.addColorStop(0, '#6B8DD6');
+                gradient.addColorStop(1, '#8FA5DB');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, size, size);
+                
+                // Add text
+                ctx.fillStyle = 'white';
+                ctx.font = `bold ${size * 0.25}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🏗️', size/2, size/2.5);
+                
+                ctx.font = `bold ${size * 0.15}px Arial`;
+                ctx.fillText('OIM', size/2, size/1.5);
+                
+                // Download
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `icon-${size}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            });
+            
+            output.innerHTML = '<p style="color: green;">✅ All icons generated! Check your downloads folder.</p>';
+        }
+    </script>
+</body>
+</html>
