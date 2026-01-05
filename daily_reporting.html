@@ -1503,7 +1503,7 @@
                     },
                     "Day 2 - Thursday": {
                     breakfast: [
-                        "Nasi tomato",
+                        "Nasi Hujan Panas",
                         "Ayam masak merah",
                         "Daging gulai",
                         "Acar rampai",
@@ -1521,7 +1521,7 @@
                         "nasi putih",
                         "Nas basmathi",
                         "Daging kicap",
-                        "Ayam bakar madu",
+                        "Ayam masak bali",
                         "ikan tenggiri asam pedas",
                         "Vege",
                         "Side Dish"
@@ -1560,7 +1560,7 @@
                         "Gulai ikan aya",
                         "Kurma telur rebus",
                         "Cakoi",
-                        "Ayam varuval",
+                        "Kari Ayam",
                         "Sambal telur"
                     ],
                     teaBreak: [
@@ -1608,13 +1608,13 @@
                     },
                     "Day 4 - Saturday": {
                     breakfast: [
-                        "Nasi minyak basmathi",
-                        "Ayam masak rose",
-                        "Daging kicap berempah",
-                        "Jelatah mentah",
-                        "Roti chapati",
-                        "Kambing kuzi",
-                        "Kentang masala"
+                        "Pulut Gaul Nyior",
+                        "Mee Goreng Basah",
+                        "Keropok Ikan",
+                        "Telur Mata",
+                        "Ayam Goreng Singgit",
+                        "Ikan Kukus Goreng",
+                        "Ikan Masin Goreng"
                     ],
                     teaBreak: [
                         "Nasi air",
@@ -1624,7 +1624,7 @@
                         "Sup fucuk",
                         "nasi putih",
                         "Nasi basmathi",
-                        "hati lembu kerutuk",
+                        "Daging dendeng",
                         "Ayam goreng kunyit",
                         "Singgang ika aya",
                         "Vege",
@@ -1641,7 +1641,7 @@
                         "Nasi putih",
                         "Nasi arab",
                         "Kambing gulai",
-                        "Ayam bakar madu",
+                        "Ayam mandy",
                         "Ikan bawal tomato",
                         "Vege",
                         "Side Dish"
@@ -1661,7 +1661,7 @@
                     "Day 5 - Sunday": {
                     breakfast: [
                         "Nasi kuning",
-                        "Itik kerutup",
+                        "Ayam goreng",
                         "Ikan tenggiri gulai kuning",
                         "Acar nanas / Sambal belacan",
                         "Roti jala",
@@ -1677,7 +1677,7 @@
                         "egg drop soup",
                         "nasi putih",
                         "Mee goreng",
-                        "Paru berlada",
+                        "Kari daging",
                         "Ayam Kicap berempah",
                         "cencaru bakar air asam",
                         "Vege",
@@ -1772,7 +1772,7 @@
                         "Telur dadar hiris",
                         "Lempeng kelapa",
                         "Sambal sardin",
-                        "Sambal sotong kering"
+                        "Sambal bilis"
                     ],
                     teaBreak: [
                         "Mee goreng",
@@ -1930,13 +1930,13 @@
                         "Pulut kelapa",
                         "Mee goreng",
                         "Ayam panggang",
-                        "Ikan kacang goreng",
+                        "Ikan kembung goreng",
                         "Roti Bom",
                         "Kerutup daging",
                         "Dhaal kentang"
                     ],
                     teaBreak: [
-                        "Bihun goreng tomyam",
+                        "Nasi Goreng",
                         "Telur mata",
                         "roti bakar sekaya"
                     ],
@@ -2033,11 +2033,11 @@
                     },
                     "Day 12 - Sunday": {
                     breakfast: [
-                        "Nasi berlauk w/ condiment",
-                        "Ayam goreng kunyit",
-                        "Gulai ikan tongkol",
-                        "Ikan masin goreng",
-                        "Sambal lada",
+                        "Nasi dagang",
+                        "Mee goreng mamak",
+                        "Gulai ikan aya",
+                        "Acar sayur",
+                        "Sambal sardin",
                         "Roti arab",
                         "Dhaal"
                     ],
@@ -3459,7 +3459,7 @@
         
         // ==================== ELECTRON INTEGRATION ====================
         if (window.electronAPI && window.electronAPI.isElectron) {
-            console.log('Running in Electron mode');
+            console.log('✅ Running in Electron mode');
             
             // Handle menu commands
             window.electronAPI.onExportJSON(() => {
@@ -3471,8 +3471,14 @@
                 if (result.success && result.data) {
                     try {
                         const data = JSON.parse(result.data);
-                        // Import logic here - you can customize this
-                        alert('✅ Import feature ready - customize as needed!');
+                        // You can customize import logic here
+                        if (confirm('Import this data? Current data will be replaced.')) {
+                            if (data.operations) localStorage.setItem('operationsHistory', JSON.stringify(data.operations));
+                            if (data.uauc) localStorage.setItem('uaucHistory', JSON.stringify(data.uauc));
+                            if (data.catering) localStorage.setItem('cateringHistory', JSON.stringify(data.catering));
+                            alert('✅ Data imported successfully!');
+                            location.reload();
+                        }
                     } catch (error) {
                         alert('❌ Error: ' + error.message);
                     }
@@ -3482,6 +3488,7 @@
             window.electronAPI.onClearAllData(() => {
                 if (confirm('⚠️ Clear ALL data? This cannot be undone!')) {
                     localStorage.clear();
+                    alert('✅ All data cleared!');
                     location.reload();
                 }
             });
@@ -3500,7 +3507,9 @@
                     operations: JSON.parse(localStorage.getItem('operationsHistory') || '[]'),
                     uauc: JSON.parse(localStorage.getItem('uaucHistory') || '[]'),
                     catering: JSON.parse(localStorage.getItem('cateringHistory') || '[]'),
-                    exportDate: new Date().toISOString()
+                    exportDate: new Date().toISOString(),
+                    platform: 'Irong Barat A, B, C',
+                    version: '1.0.0'
                 };
                 
                 const filename = `OIM_Backup_${new Date().toISOString().split('T')[0]}.json`;
@@ -3510,11 +3519,13 @@
                 );
                 
                 if (result.success) {
-                    alert('✅ Data exported successfully!');
+                    alert('✅ Data exported successfully!\n\nFile: ' + filename);
                 } else if (!result.cancelled) {
                     alert('❌ Export failed: ' + (result.error || 'Unknown error'));
                 }
             }
+        } else {
+            console.log('ℹ️ Running in browser mode');
         }
     </script>
 </body>
